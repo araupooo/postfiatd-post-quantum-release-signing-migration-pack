@@ -1,0 +1,22 @@
+== hybrid size model check ==
+step: parameter sets: 7
+step: hybrid combinations: 5
+step: Ed25519 + ML-DSA-44: combined sig 2484 bytes (expected 2484), combined pk 1344 bytes (expected 1344), ratio 38.8125x: PASS
+step: Ed25519 + ML-DSA-65: combined sig 3373 bytes (expected 3373), combined pk 1984 bytes (expected 1984), ratio 52.703125x: PASS
+step: Ed25519 + ML-DSA-87: combined sig 4691 bytes (expected 4691), combined pk 2624 bytes (expected 2624), ratio 73.296875x: PASS
+step: Ed25519 + SLH-DSA-SHA2-128s: combined sig 7920 bytes (expected 7920), combined pk 64 bytes (expected 64), ratio 123.75x: PASS
+step: Ed25519 + SLH-DSA-SHA2-128f: combined sig 17152 bytes (expected 17152), combined pk 64 bytes (expected 64), ratio 268.0x: PASS
+step: recommended combination: Ed25519 + ML-DSA-44
+step: smallest ML-DSA hybrid: Ed25519 + ML-DSA-44 at 2484 bytes: PASS
+== measured hybrid log consistency ==
+step: hybrid block Ed25519 + ML-DSA-44 present: PASS
+step: hybrid block Ed25519 + SLH-DSA-SHA2-128f present: PASS
+step: control C-1 PASS in hybrid log: PASS
+step: control C-2 PASS in hybrid log: PASS
+step: control C-3 PASS in hybrid log: PASS
+step: control C-4 PASS in hybrid log: PASS
+step: control C-5 PASS in hybrid log: PASS
+step: measured hybrid sig len Ed25519 + ML-DSA-44: 2484 bytes (expected 2484): PASS
+step: measured hybrid sig len Ed25519 + SLH-DSA-SHA2-128f: 17152 bytes (expected 17152): PASS
+step: hybrid log ends with result: OK: PASS
+result: OK

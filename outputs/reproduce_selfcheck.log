@@ -1,0 +1,165 @@
+== signing_inventory ==
+== signing inventory check ==
+step: pinned commit: 0085a1ff885d6a446369cf73a4430f75af22be55
+step: excerpt files: 9
+step: excerpt .github/workflows/build.yml (lines 71-90: build job: computes Docker image tags (mutable -latest tags) and builds/pushes images; no signing step)
+step: excerpt .github/workflows/build.yml: 20 lines, 71-90
+step: excerpt .github/workflows/testnet-build.yml (lines 40-71: release job: publishes a GitHub release with gh release create from generated notes; no signing, attestation, or checksum step in this job)
+step: excerpt .github/workflows/testnet-build.yml (lines 28-39: release job: version is extracted from BuildInfo.cpp versionString)
+step: excerpt .github/workflows/testnet-build.yml: 44 lines, 28-71
+step: excerpt docs/build/install.md (lines 30-45: Install docs: package installs verify Ripple's GPG package-signing key for the rippled deb/rpm repos - this is package-repo signing, not postfiatd release signing)
+step: excerpt docs/build/install.md: 16 lines, 30-45
+step: excerpt docs/dynamic-unl/reviews/FeedbackAnalysis_Codex54.md (lines 331-342: Ops/security review: image signing (Cosign) deferred to Phase 2 or mainnet, with container scanning and SBOM)
+step: excerpt docs/dynamic-unl/reviews/FeedbackAnalysis_Codex54.md: 12 lines, 331-342
+step: excerpt src/libxrpl/protocol/BuildInfo.cpp (lines 37-41: versionString 1.0.9 - the version the release job tags)
+step: excerpt src/libxrpl/protocol/BuildInfo.cpp: 5 lines, 37-41
+step: excerpt src/libxrpl/protocol/PublicKey.cpp (lines 289-316: verify(): dispatch by key type; secp256k1 verifies sha512Half digest, Ed25519 strips 0xED prefix and calls ed25519_sign_open after canonicality check)
+step: excerpt src/libxrpl/protocol/PublicKey.cpp (lines 240-283: verifyDigest(): secp256k1-only; rejects non-canonical ECDSA signatures, normalizes low-S when not fully canonical)
+step: excerpt src/libxrpl/protocol/PublicKey.cpp: 72 lines, 240-316
+step: excerpt src/libxrpl/protocol/SecretKey.cpp (lines 255-290: sign(): Ed25519 64-byte signature (line 264) and secp256k1 ECDSA over sha512Half with RFC6979 nonce and DER serialization)
+step: excerpt src/libxrpl/protocol/SecretKey.cpp (lines 229-253: signDigest(): secp256k1-only digest signing, RFC6979 nonce, DER serialization into a 72-byte buffer)
+step: excerpt src/libxrpl/protocol/SecretKey.cpp: 61 lines, 229-290
+step: excerpt src/xrpld/app/misc/detail/Manifest.cpp (lines 196-216: Manifest::verify(): ephemeral signing-key signature plus master-key signature, both over HashPrefix::manifest)
+step: excerpt src/xrpld/app/misc/detail/Manifest.cpp (lines 226-242: Manifest::revoked(): maximum sequence number means the master key is revoked)
+step: excerpt src/xrpld/app/misc/detail/Manifest.cpp (lines 405-448: ManifestCache::applyManifest(): a manifest whose sequence is not strictly greater than the stored one is rejected as Invalid; a revoked manifest is logged Revoked)
+step: excerpt src/xrpld/app/misc/detail/Manifest.cpp (lines 60-85: Manifest format: master signature required, sequence number required, ephemeral signing key + signature)
+step: excerpt src/xrpld/app/misc/detail/Manifest.cpp: 108 lines, 60-448
+step: excerpt src/xrpld/app/misc/detail/ValidatorList.cpp (lines 620-648: ValidatorList v2 protocol message: only VLs with sequence larger than the peer sequence are included (anti-rollback on fetch))
+step: excerpt src/xrpld/app/misc/detail/ValidatorList.cpp: 29 lines, 620-648
+step: total excerpt lines: 367
+== inventory findings ==
+step: findings: 6
+step: finding 1/6: [HIGH] release publication (measured-absence)
+  detail: testnet-build.yml release job publishes a GitHub release with `gh release create` from generated notes (testnet-build.yml:44-71). The job contains no signing st
+step: finding 2/6: [HIGH] container image publication (measured-absence)
+  detail: build.yml builds and pushes Docker images agtipft/postfiatd to a registry with mutable -latest tags (build.yml:71-90). No image-signing step (Cosign) exists any
+step: finding 3/6: [INFO] package-repo signing (not postfiatd release signing) (measured)
+  detail: docs/build/install.md:33-41 tells installers to trust Ripple's GPG package-signing key for the rippled deb/rpm package repositories. This signs Ripple's package
+step: finding 4/6: [INFO] in-tree protocol signing (Ed25519 + secp256k1) (measured)
+  detail: src/libxrpl/protocol/SecretKey.cpp sign() (lines 256-290): Ed25519 signs a 64-byte signature via ed25519_sign; secp256k1 ECDSA signs the sha512Half digest with 
+step: finding 5/6: [INFO] in-tree rollback protection (validator manifests) (measured)
+  detail: ManifestCache::applyManifest() rejects a manifest whose sequence number is not strictly greater than the stored one (Manifest.cpp:411-413, logged Invalid). Mani
+step: finding 6/6: [HIGH] release-signing code in the tree (measured-absence)
+  detail: Grep of the pinned tree for release signing returned nothing: no file implements, calls, or documents signing of postfiatd releases (no 'release sign', no cosig
+step: negative searches: 3
+step: negative search 'cosign|sigstore|attest|gpg|sha256sum|checksum|slsa' over .github/workflows/ (all ten files): no release-signing step; only unrelated hits (Caddy apt key in deploy.yml)
+step: negative search 'release.*sign|sign.*release' over whole pinned tree (src/, .github/, docs/, README.md): no matches except docs/build/install.md (Ripple package-repo GPG key, not postfiatd releases)
+step: negative search 'cosign' over src/, .github/, docs/build/, top-level docs: no matches; the only Cosign mention in the tree is the deferral note in docs/dynamic-unl/reviews/FeedbackAnalysis_Codex54.md:335,341
+step: workflows checked: 10
+step: workflow checked: .github/workflows/ai-devnet-build.yml
+step: workflow checked: .github/workflows/build.yml
+step: workflow checked: .github/workflows/deploy.yml
+step: workflow checked: .github/workflows/destroy.yml
+step: workflow checked: .github/workflows/devnet-build.yml
+step: workflow checked: .github/workflows/feature-build.yml
+step: workflow checked: .github/workflows/mainnet-build.yml
+step: workflow checked: .github/workflows/pr-check.yml
+step: workflow checked: .github/workflows/testnet-build.yml
+step: workflow checked: .github/workflows/update.yml
+result: OK
+== hybrid_model ==
+== hybrid size model check ==
+step: parameter sets: 7
+step: hybrid combinations: 5
+step: Ed25519 + ML-DSA-44: combined sig 2484 bytes (expected 2484), combined pk 1344 bytes (expected 1344), ratio 38.8125x: PASS
+step: Ed25519 + ML-DSA-65: combined sig 3373 bytes (expected 3373), combined pk 1984 bytes (expected 1984), ratio 52.703125x: PASS
+step: Ed25519 + ML-DSA-87: combined sig 4691 bytes (expected 4691), combined pk 2624 bytes (expected 2624), ratio 73.296875x: PASS
+step: Ed25519 + SLH-DSA-SHA2-128s: combined sig 7920 bytes (expected 7920), combined pk 64 bytes (expected 64), ratio 123.75x: PASS
+step: Ed25519 + SLH-DSA-SHA2-128f: combined sig 17152 bytes (expected 17152), combined pk 64 bytes (expected 64), ratio 268.0x: PASS
+step: recommended combination: Ed25519 + ML-DSA-44
+step: smallest ML-DSA hybrid: Ed25519 + ML-DSA-44 at 2484 bytes: PASS
+== measured hybrid log consistency ==
+step: hybrid block Ed25519 + ML-DSA-44 present: PASS
+step: hybrid block Ed25519 + SLH-DSA-SHA2-128f present: PASS
+step: control C-1 PASS in hybrid log: PASS
+step: control C-2 PASS in hybrid log: PASS
+step: control C-3 PASS in hybrid log: PASS
+step: control C-4 PASS in hybrid log: PASS
+step: control C-5 PASS in hybrid log: PASS
+step: measured hybrid sig len Ed25519 + ML-DSA-44: 2484 bytes (expected 2484): PASS
+step: measured hybrid sig len Ed25519 + SLH-DSA-SHA2-128f: 17152 bytes (expected 17152): PASS
+step: hybrid log ends with result: OK: PASS
+result: OK
+== migration_model ==
+== migration plan check ==
+step: stages: 5
+step: stage ids in order S0, S1, S2, S3, S4: PASS
+step: stage S0 'Sign what exists today': duration estimate 1-2 weeks, 3 work items
+step: stage S1 'Hybrid envelope, dual-sign in parallel': duration estimate 2-4 weeks, 3 work items
+step: stage S2 'Verifiers require the PQ half': duration estimate 4-8 weeks, 3 work items
+step: stage S3 'Classical-only retired for new releases': duration estimate 8-16 weeks, 3 work items
+step: stage S4 'Review and re-evaluate': duration estimate ongoing weeks, 3 work items
+step: planning horizon S0-S3: 15-30 weeks (estimates, not a commitment)
+step: stage S2 gate requires rejecting stripped envelopes: PASS
+step: stage S0 introduces release signing first: PASS
+result: OK
+== measurement structure check ==
+== measurement logs structural check ==
+step: pq block ML-DSA-44 (32-byte message) present: PASS
+step: pq block ML-DSA-65 (32-byte message) present: PASS
+step: pq block ML-DSA-87 (32-byte message) present: PASS
+step: pq block SLH-DSA-SHA2-128s (32-byte message) present: PASS
+step: pq block SLH-DSA-SHA2-128f (32-byte message) present: PASS
+step: pq block ML-DSA-44 (2048-byte message) present: PASS
+step: pq block SLH-DSA-SHA2-128f (2048-byte message) present: PASS
+step: measured lengths ML-DSA-44: pk 1312 sk 2560 sig 2420 (expected 1312/2560/2420): PASS
+step: measured lengths ML-DSA-65: pk 1952 sk 4032 sig 3309 (expected 1952/4032/3309): PASS
+step: measured lengths ML-DSA-87: pk 2592 sk 4896 sig 4627 (expected 2592/4896/4627): PASS
+step: measured lengths SLH-DSA-SHA2-128s: pk 32 sk 64 sig 7856 (expected 32/64/7856): PASS
+step: measured lengths SLH-DSA-SHA2-128f: pk 32 sk 64 sig 17088 (expected 32/64/17088): PASS
+step: measured lengths ML-DSA-44: pk 1312 sk 2560 sig 2420 (expected 1312/2560/2420): PASS
+step: measured lengths SLH-DSA-SHA2-128f: pk 32 sk 64 sig 17088 (expected 32/64/17088): PASS
+step: valid-signature controls PASS: 7 blocks (expected 7): PASS
+step: tampered-signature controls PASS: 7 blocks (expected 7): PASS
+step: pq log result OK lines: 7 (expected 7): PASS
+step: classical block ed25519 present: PASS
+step: classical block ecdsap256 present: PASS
+step: classical log contains 'sign/s' column: PASS
+step: classical log contains 'verify/s' column: PASS
+step: hybrid block Ed25519 + ML-DSA-44 present: PASS
+step: hybrid block Ed25519 + SLH-DSA-SHA2-128f present: PASS
+step: hybrid control C-1 PASS in both blocks: 2 (expected 2): PASS
+step: hybrid control C-2 PASS in both blocks: 2 (expected 2): PASS
+step: hybrid control C-3 PASS in both blocks: 2 (expected 2): PASS
+step: hybrid control C-4 PASS in both blocks: 2 (expected 2): PASS
+step: hybrid control C-5 PASS in both blocks: 2 (expected 2): PASS
+step: hybrid log ends with result: OK: PASS
+step: measured Ed25519 signature length 64 (expected 64): PASS
+step: measured Ed25519 signature length 64 (expected 64): PASS
+result: OK
+== digest verification ==
+./.github/workflows/ci.yml: OK
+./.gitignore: OK
+./README.md: OK
+./data/algorithm_params.json: OK
+./data/hybrid_model.json: OK
+./data/migration_plan.json: OK
+./data/postfiatd_pin.json: OK
+./data/signing_inventory.json: OK
+./data/source_excerpts.json: OK
+./docs/ALGORITHM_COMPARISON.md: OK
+./docs/CLAIMS.md: OK
+./docs/DECISION_MEMO.md: OK
+./docs/FAILURE_MODES.md: OK
+./docs/HYBRID_DESIGN.md: OK
+./docs/MIGRATION_PLAN.md: OK
+./docs/REMEDIATION.md: OK
+./docs/REPRODUCTION.md: OK
+./docs/ROLLBACK_KEY_COMPROMISE.md: OK
+./docs/SOURCES.md: OK
+./harness/bench_sig.c: OK
+./harness/classical_speed.sh: OK
+./harness/environment.sh: OK
+./harness/hybrid_bench.c: OK
+./harness/run_benchmarks.sh: OK
+./outputs/hybrid_model.log: OK
+./outputs/migration_model.log: OK
+./outputs/signing_inventory.log: OK
+./reproduce.sh: OK
+./scripts/check_measurements.py: OK
+./scripts/hybrid_model.py: OK
+./scripts/migration_model.py: OK
+./scripts/run_all.sh: OK
+./scripts/signing_inventory.py: OK
+./verify_digests.sh: OK
+REPRODUCE OK

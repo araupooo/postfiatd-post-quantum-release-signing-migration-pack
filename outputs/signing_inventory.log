@@ -1,0 +1,58 @@
+== signing inventory check ==
+step: pinned commit: 0085a1ff885d6a446369cf73a4430f75af22be55
+step: excerpt files: 9
+step: excerpt .github/workflows/build.yml (lines 71-90: build job: computes Docker image tags (mutable -latest tags) and builds/pushes images; no signing step)
+step: excerpt .github/workflows/build.yml: 20 lines, 71-90
+step: excerpt .github/workflows/testnet-build.yml (lines 40-71: release job: publishes a GitHub release with gh release create from generated notes; no signing, attestation, or checksum step in this job)
+step: excerpt .github/workflows/testnet-build.yml (lines 28-39: release job: version is extracted from BuildInfo.cpp versionString)
+step: excerpt .github/workflows/testnet-build.yml: 44 lines, 28-71
+step: excerpt docs/build/install.md (lines 30-45: Install docs: package installs verify Ripple's GPG package-signing key for the rippled deb/rpm repos - this is package-repo signing, not postfiatd release signing)
+step: excerpt docs/build/install.md: 16 lines, 30-45
+step: excerpt docs/dynamic-unl/reviews/FeedbackAnalysis_Codex54.md (lines 331-342: Ops/security review: image signing (Cosign) deferred to Phase 2 or mainnet, with container scanning and SBOM)
+step: excerpt docs/dynamic-unl/reviews/FeedbackAnalysis_Codex54.md: 12 lines, 331-342
+step: excerpt src/libxrpl/protocol/BuildInfo.cpp (lines 37-41: versionString 1.0.9 - the version the release job tags)
+step: excerpt src/libxrpl/protocol/BuildInfo.cpp: 5 lines, 37-41
+step: excerpt src/libxrpl/protocol/PublicKey.cpp (lines 289-316: verify(): dispatch by key type; secp256k1 verifies sha512Half digest, Ed25519 strips 0xED prefix and calls ed25519_sign_open after canonicality check)
+step: excerpt src/libxrpl/protocol/PublicKey.cpp (lines 240-283: verifyDigest(): secp256k1-only; rejects non-canonical ECDSA signatures, normalizes low-S when not fully canonical)
+step: excerpt src/libxrpl/protocol/PublicKey.cpp: 72 lines, 240-316
+step: excerpt src/libxrpl/protocol/SecretKey.cpp (lines 255-290: sign(): Ed25519 64-byte signature (line 264) and secp256k1 ECDSA over sha512Half with RFC6979 nonce and DER serialization)
+step: excerpt src/libxrpl/protocol/SecretKey.cpp (lines 229-253: signDigest(): secp256k1-only digest signing, RFC6979 nonce, DER serialization into a 72-byte buffer)
+step: excerpt src/libxrpl/protocol/SecretKey.cpp: 61 lines, 229-290
+step: excerpt src/xrpld/app/misc/detail/Manifest.cpp (lines 196-216: Manifest::verify(): ephemeral signing-key signature plus master-key signature, both over HashPrefix::manifest)
+step: excerpt src/xrpld/app/misc/detail/Manifest.cpp (lines 226-242: Manifest::revoked(): maximum sequence number means the master key is revoked)
+step: excerpt src/xrpld/app/misc/detail/Manifest.cpp (lines 405-448: ManifestCache::applyManifest(): a manifest whose sequence is not strictly greater than the stored one is rejected as Invalid; a revoked manifest is logged Revoked)
+step: excerpt src/xrpld/app/misc/detail/Manifest.cpp (lines 60-85: Manifest format: master signature required, sequence number required, ephemeral signing key + signature)
+step: excerpt src/xrpld/app/misc/detail/Manifest.cpp: 108 lines, 60-448
+step: excerpt src/xrpld/app/misc/detail/ValidatorList.cpp (lines 620-648: ValidatorList v2 protocol message: only VLs with sequence larger than the peer sequence are included (anti-rollback on fetch))
+step: excerpt src/xrpld/app/misc/detail/ValidatorList.cpp: 29 lines, 620-648
+step: total excerpt lines: 367
+== inventory findings ==
+step: findings: 6
+step: finding 1/6: [HIGH] release publication (measured-absence)
+  detail: testnet-build.yml release job publishes a GitHub release with `gh release create` from generated notes (testnet-build.yml:44-71). The job contains no signing st
+step: finding 2/6: [HIGH] container image publication (measured-absence)
+  detail: build.yml builds and pushes Docker images agtipft/postfiatd to a registry with mutable -latest tags (build.yml:71-90). No image-signing step (Cosign) exists any
+step: finding 3/6: [INFO] package-repo signing (not postfiatd release signing) (measured)
+  detail: docs/build/install.md:33-41 tells installers to trust Ripple's GPG package-signing key for the rippled deb/rpm package repositories. This signs Ripple's package
+step: finding 4/6: [INFO] in-tree protocol signing (Ed25519 + secp256k1) (measured)
+  detail: src/libxrpl/protocol/SecretKey.cpp sign() (lines 256-290): Ed25519 signs a 64-byte signature via ed25519_sign; secp256k1 ECDSA signs the sha512Half digest with 
+step: finding 5/6: [INFO] in-tree rollback protection (validator manifests) (measured)
+  detail: ManifestCache::applyManifest() rejects a manifest whose sequence number is not strictly greater than the stored one (Manifest.cpp:411-413, logged Invalid). Mani
+step: finding 6/6: [HIGH] release-signing code in the tree (measured-absence)
+  detail: Grep of the pinned tree for release signing returned nothing: no file implements, calls, or documents signing of postfiatd releases (no 'release sign', no cosig
+step: negative searches: 3
+step: negative search 'cosign|sigstore|attest|gpg|sha256sum|checksum|slsa' over .github/workflows/ (all ten files): no release-signing step; only unrelated hits (Caddy apt key in deploy.yml)
+step: negative search 'release.*sign|sign.*release' over whole pinned tree (src/, .github/, docs/, README.md): no matches except docs/build/install.md (Ripple package-repo GPG key, not postfiatd releases)
+step: negative search 'cosign' over src/, .github/, docs/build/, top-level docs: no matches; the only Cosign mention in the tree is the deferral note in docs/dynamic-unl/reviews/FeedbackAnalysis_Codex54.md:335,341
+step: workflows checked: 10
+step: workflow checked: .github/workflows/ai-devnet-build.yml
+step: workflow checked: .github/workflows/build.yml
+step: workflow checked: .github/workflows/deploy.yml
+step: workflow checked: .github/workflows/destroy.yml
+step: workflow checked: .github/workflows/devnet-build.yml
+step: workflow checked: .github/workflows/feature-build.yml
+step: workflow checked: .github/workflows/mainnet-build.yml
+step: workflow checked: .github/workflows/pr-check.yml
+step: workflow checked: .github/workflows/testnet-build.yml
+step: workflow checked: .github/workflows/update.yml
+result: OK

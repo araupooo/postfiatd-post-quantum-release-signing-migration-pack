@@ -1,0 +1,226 @@
+=== pq-signature benchmark run ===
+liboqs: 0.14.0 (open-quantum-safe/liboqs, tag 0.14.0, commit 94b421ebb82405c843dba4e9aa521a56ee5a333d)
+message: fixed 32-byte vector (256-bit digest length, mirrors postfiatd sha512Half)
+threads: 1
+verify_budget_sec: 5
+sign_budget_sec: 5 (capped at 25 sign iterations per algorithm)
+
+--- ML-DSA-44 ---
+liboqs_algorithm_name: ML-DSA-44
+liboqs_version: 0.14.0
+algorithm: ML-DSA-44
+message_bytes: 32
+step: algorithm object created
+claimed_nist_level: 2
+length_public_key: 1312
+length_secret_key: 2560
+length_signature: 2420
+step: keypair generated
+step: first signature produced
+signature_len_produced: 2420
+step: produced signature length matches declared length
+control_valid_signature_verifies: PASS
+control_tampered_signature_rejected: PASS
+step: controls passed (valid verifies, tampered rejects)
+verify_ops: 137204
+verify_seconds: 5.000026
+verify_ops_per_sec: 27440.658
+verify_usec_per_op: 36.442
+sign_ops: 25
+sign_seconds: 0.002643
+sign_ops_per_sec: 9459.385
+sign_usec_per_op: 105.715
+sign_note: iteration cap of 25 reached; rate is a lower bound
+keypair_ops: 10
+keypair_seconds: 0.000339
+keypair_ops_per_sec: 29466.451
+result: OK
+
+--- ML-DSA-65 ---
+liboqs_algorithm_name: ML-DSA-65
+liboqs_version: 0.14.0
+algorithm: ML-DSA-65
+message_bytes: 32
+step: algorithm object created
+claimed_nist_level: 3
+length_public_key: 1952
+length_secret_key: 4032
+length_signature: 3309
+step: keypair generated
+step: first signature produced
+signature_len_produced: 3309
+step: produced signature length matches declared length
+control_valid_signature_verifies: PASS
+control_tampered_signature_rejected: PASS
+step: controls passed (valid verifies, tampered rejects)
+verify_ops: 87142
+verify_seconds: 5.000045
+verify_ops_per_sec: 17428.242
+verify_usec_per_op: 57.378
+sign_ops: 25
+sign_seconds: 0.004402
+sign_ops_per_sec: 5679.135
+sign_usec_per_op: 176.083
+sign_note: iteration cap of 25 reached; rate is a lower bound
+keypair_ops: 10
+keypair_seconds: 0.000596
+keypair_ops_per_sec: 16783.733
+result: OK
+
+--- ML-DSA-87 ---
+liboqs_algorithm_name: ML-DSA-87
+liboqs_version: 0.14.0
+algorithm: ML-DSA-87
+message_bytes: 32
+step: algorithm object created
+claimed_nist_level: 5
+length_public_key: 2592
+length_secret_key: 4896
+length_signature: 4627
+step: keypair generated
+step: first signature produced
+signature_len_produced: 4627
+step: produced signature length matches declared length
+control_valid_signature_verifies: PASS
+control_tampered_signature_rejected: PASS
+step: controls passed (valid verifies, tampered rejects)
+verify_ops: 57873
+verify_seconds: 5.000086
+verify_ops_per_sec: 11574.400
+verify_usec_per_op: 86.398
+sign_ops: 25
+sign_seconds: 0.004200
+sign_ops_per_sec: 5951.990
+sign_usec_per_op: 168.011
+sign_note: iteration cap of 25 reached; rate is a lower bound
+keypair_ops: 10
+keypair_seconds: 0.000869
+keypair_ops_per_sec: 11503.297
+result: OK
+
+--- SLH-DSA-SHA2-128s ---
+liboqs_algorithm_name: SPHINCS+-SHA2-128s-simple
+liboqs_version: 0.14.0
+algorithm: SPHINCS+-SHA2-128s-simple
+message_bytes: 32
+step: algorithm object created
+claimed_nist_level: 1
+length_public_key: 32
+length_secret_key: 64
+length_signature: 7856
+step: keypair generated
+step: first signature produced
+signature_len_produced: 7856
+step: produced signature length matches declared length
+control_valid_signature_verifies: PASS
+control_tampered_signature_rejected: PASS
+step: controls passed (valid verifies, tampered rejects)
+verify_ops: 13757
+verify_seconds: 5.000260
+verify_ops_per_sec: 2751.257
+verify_usec_per_op: 363.470
+sign_ops: 19
+sign_seconds: 5.208502
+sign_ops_per_sec: 3.648
+sign_usec_per_op: 274131.686
+keypair_ops: 10
+keypair_seconds: 0.351551
+keypair_ops_per_sec: 28.445
+result: OK
+
+--- SLH-DSA-SHA2-128f ---
+liboqs_algorithm_name: SPHINCS+-SHA2-128f-simple
+liboqs_version: 0.14.0
+algorithm: SPHINCS+-SHA2-128f-simple
+message_bytes: 32
+step: algorithm object created
+claimed_nist_level: 1
+length_public_key: 32
+length_secret_key: 64
+length_signature: 17088
+step: keypair generated
+step: first signature produced
+signature_len_produced: 17088
+step: produced signature length matches declared length
+control_valid_signature_verifies: PASS
+control_tampered_signature_rejected: PASS
+step: controls passed (valid verifies, tampered rejects)
+verify_ops: 4962
+verify_seconds: 5.000083
+verify_ops_per_sec: 992.384
+verify_usec_per_op: 1007.675
+sign_ops: 25
+sign_seconds: 0.332322
+sign_ops_per_sec: 75.228
+sign_usec_per_op: 13292.878
+sign_note: iteration cap of 25 reached; rate is a lower bound
+keypair_ops: 10
+keypair_seconds: 0.005629
+keypair_ops_per_sec: 1776.489
+result: OK
+
+=== pq-signature benchmark, 2048-byte manifest payload ===
+message: fixed 2048-byte vector (release-manifest payload model)
+
+--- ML-DSA-44 (2048-byte message) ---
+liboqs_algorithm_name: ML-DSA-44
+liboqs_version: 0.14.0
+algorithm: ML-DSA-44
+message_bytes: 2048
+step: algorithm object created
+claimed_nist_level: 2
+length_public_key: 1312
+length_secret_key: 2560
+length_signature: 2420
+step: keypair generated
+step: first signature produced
+signature_len_produced: 2420
+step: produced signature length matches declared length
+control_valid_signature_verifies: PASS
+control_tampered_signature_rejected: PASS
+step: controls passed (valid verifies, tampered rejects)
+verify_ops: 108072
+verify_seconds: 5.000004
+verify_ops_per_sec: 21614.381
+verify_usec_per_op: 46.265
+sign_ops: 25
+sign_seconds: 0.003255
+sign_ops_per_sec: 7679.484
+sign_usec_per_op: 130.217
+sign_note: iteration cap of 25 reached; rate is a lower bound
+keypair_ops: 10
+keypair_seconds: 0.000348
+keypair_ops_per_sec: 28713.107
+result: OK
+
+--- SLH-DSA-SHA2-128f (2048-byte message) ---
+liboqs_algorithm_name: SPHINCS+-SHA2-128f-simple
+liboqs_version: 0.14.0
+algorithm: SPHINCS+-SHA2-128f-simple
+message_bytes: 2048
+step: algorithm object created
+claimed_nist_level: 1
+length_public_key: 32
+length_secret_key: 64
+length_signature: 17088
+step: keypair generated
+step: first signature produced
+signature_len_produced: 17088
+step: produced signature length matches declared length
+control_valid_signature_verifies: PASS
+control_tampered_signature_rejected: PASS
+step: controls passed (valid verifies, tampered rejects)
+verify_ops: 5037
+verify_seconds: 5.000515
+verify_ops_per_sec: 1007.296
+verify_usec_per_op: 992.757
+sign_ops: 25
+sign_seconds: 0.338737
+sign_ops_per_sec: 73.804
+sign_usec_per_op: 13549.477
+sign_note: iteration cap of 25 reached; rate is a lower bound
+keypair_ops: 10
+keypair_seconds: 0.005619
+keypair_ops_per_sec: 1779.808
+result: OK
+

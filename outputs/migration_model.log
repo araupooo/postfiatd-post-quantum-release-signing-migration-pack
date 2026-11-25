@@ -1,0 +1,12 @@
+== migration plan check ==
+step: stages: 5
+step: stage ids in order S0, S1, S2, S3, S4: PASS
+step: stage S0 'Sign what exists today': duration estimate 1-2 weeks, 3 work items
+step: stage S1 'Hybrid envelope, dual-sign in parallel': duration estimate 2-4 weeks, 3 work items
+step: stage S2 'Verifiers require the PQ half': duration estimate 4-8 weeks, 3 work items
+step: stage S3 'Classical-only retired for new releases': duration estimate 8-16 weeks, 3 work items
+step: stage S4 'Review and re-evaluate': duration estimate ongoing weeks, 3 work items
+step: planning horizon S0-S3: 15-30 weeks (estimates, not a commitment)
+step: stage S2 gate requires rejecting stripped envelopes: PASS
+step: stage S0 introduces release signing first: PASS
+result: OK
